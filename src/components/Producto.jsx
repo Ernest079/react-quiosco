@@ -17,7 +17,9 @@ export const Producto = ({nombre, precio, imagen, categoria_id, id}) => {
         </p>
         <button type="button"
           className="bg-yellow-500 hover:bg-yellow-700 text-white w-full p-3 font-bold mt-5 uppercase cursor-pointer"
-          onClick={hanndleModal}
+          onClick={() => {
+            hanndleModal();
+          }}
         >
           Agregar
         </button>
