@@ -1,5 +1,6 @@
-import { createContext, useState } from "react"
+import { createContext, useEffect, useState } from "react"
 import { categorias as categoriasDB } from "../data/categorias"
+import { toast } from "react-toastify";
 
 
 const QuioscoContext = createContext();
@@ -11,6 +12,13 @@ export const QuioscoProvider = ({children}) => {
   const [modal, setModal] = useState(false);
   const [producto, setProducto] = useState({});
   const [pedido, setPedido] = useState([]);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    const nuevoTotal = pedido.reduce((total, producto) => (producto.precio * producto.cantidad) + total, 0);
+    setTotal(nuevoTotal);
+  }, [pedido])
+  
 
   const hanndleModal = () => {
     setModal(!modal);
@@ -25,11 +33,32 @@ export const QuioscoProvider = ({children}) => {
     setProducto(producto);
   }
 
-  const agregarPedido = ({categoria_id, imagen, ...producto}) => {
-    setPedido([
-      ...pedido,
-      producto
-    ])
+  const agregarPedido = ({categoria_id, ...producto}) => {
+    
+    if(pedido.some(peidoState => peidoState.id === producto.id)){
+      const pedidoActualizado = pedido.map(pedidoState => pedidoState.id === producto.id ?
+        producto : pedidoState);
+      setPedido(pedidoActualizado);
+      toast.success('Guardado Correctamente');
+    } else {
+      setPedido([
+        ...pedido,
+        producto
+      ]);
+      toast.success('Agregado al Pedido');
+    }
+  }
+
+  const editarCantidad = (id) => {
+    const productoActualizar = pedido.filter(producto => producto.id === id)[0];
+    setProducto(productoActualizar);
+    setModal(!modal);
+  }
+
+  const eliminarProductoPedido = (id) => {
+    const pedidoActualizado = pedido.filter(producto => producto.id !== id);
+    setPedido(pedidoActualizado);
+    toast.success('Pedido Eliminado');
   }
 
   return (
@@ -44,6 +73,9 @@ export const QuioscoProvider = ({children}) => {
         handdleSetProducto,
         pedido,
         agregarPedido,
+        editarCantidad,
+        eliminarProductoPedido,
+        total,
       }}
     >
       {children}

@@ -1,7 +1,9 @@
 import { formatPrice } from "../helpers";
+import { useQuiosco } from "../hooks/useQuiosco";
 
 export const ResumenProducto = ({producto}) => {
   const {id, nombre, precio, cantidad} = producto;
+  const {editarCantidad, eliminarProductoPedido} = useQuiosco();
   return (
     <div className="shadow space-y-1 p-4 bg-white">
       <div className="space-y-2">
@@ -19,6 +21,7 @@ export const ResumenProducto = ({producto}) => {
         <button
           type="button"
           className="cursor-pointer bg-sky-700 p-2 text-white rounded-md font-bold uppercase shadow-md text-center"
+          onClick={() => {editarCantidad(id);}}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -32,6 +35,7 @@ export const ResumenProducto = ({producto}) => {
         <button
           type="button"
           className="cursor-pointer bg-red-700 p-2 text-white rounded-md font-bold uppercase shadow-md text-center"
+          onClick={() => {eliminarProductoPedido(id)}}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

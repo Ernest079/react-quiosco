@@ -4,6 +4,8 @@ import { Resumen } from '../components/Resumen';
 import { useQuiosco } from '../hooks/useQuiosco';
 import Modal from 'react-modal';
 import { ModalProducto } from '../components/ModalProducto';
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/ReactToastify.css";
 
 const customStyles = {
   content: {
@@ -20,10 +22,7 @@ Modal.setAppElement("#root");
 
 export const Layout = () => {
 
-  const {modal, hanndleModal} = useQuiosco();
-  console.log(modal);
-
-
+  const {modal} = useQuiosco();
 
   return (
     <>
@@ -40,6 +39,8 @@ export const Layout = () => {
       <Modal isOpen={modal} style={customStyles}>
         <ModalProducto/>
       </Modal>
+
+      <ToastContainer/>
         
     </>
   )

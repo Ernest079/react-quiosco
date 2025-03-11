@@ -8,10 +8,13 @@ export const ModalProducto = () => {
 
   const {nombre, categoria_id, imagen, precio, id} = producto;
   const [cantidad, setCantidad] = useState(1);
+  const [edicion, setEdicion] = useState(false);
 
   useEffect(() => {  
     if(pedido.some(peidoState => peidoState.id === producto.id)){
       const productoEdicion = pedido.filter(pedidoState => pedidoState.id === producto.id)[0];
+      setCantidad(productoEdicion.cantidad);
+      setEdicion(true);
     } 
   },[pedido])
   
@@ -61,7 +64,9 @@ export const ModalProducto = () => {
           <button type="button" className="bg-yellow-500 hover:bg-amber-600 text-white px-5 py-2 mt-5 font-bold uppercase rounded cursor-pointer"
             onClick={() => {agregarPedido({...producto, cantidad}); hanndleModal();} }
           >
-            Añadir al pedido
+            {
+              edicion ? 'Guardar Cambios' : 'Añadir al Pedido'
+            }
           </button>
         </div>
       </div>
