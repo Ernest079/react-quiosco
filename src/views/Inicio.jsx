@@ -16,7 +16,7 @@ export const Inicio = () => {
         {
           products.map(producto => (
             <Producto key={producto.imagen} 
-              {...producto}
+              producto = {producto}
             />
           ))
         }

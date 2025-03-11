@@ -3,6 +3,7 @@ import { Sidebar } from '../components/Sidebar';
 import { Resumen } from '../components/Resumen';
 import { useQuiosco } from '../hooks/useQuiosco';
 import Modal from 'react-modal';
+import { ModalProducto } from '../components/ModalProducto';
 
 const customStyles = {
   content: {
@@ -35,19 +36,11 @@ export const Layout = () => {
 
         <Resumen/>
       </div>
-      {
-        modal && (
-          <Modal isOpen={modal} style={customStyles}>
-            <p>Desde Modal</p>
-            <button type='button'
-              onClick={hanndleModal}
-            >
-              Cerrar
-            </button>
-          </Modal>
-        )
-      }
-      
+
+      <Modal isOpen={modal} style={customStyles}>
+        <ModalProducto/>
+      </Modal>
+        
     </>
   )
 }

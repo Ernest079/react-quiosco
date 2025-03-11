@@ -1,9 +1,10 @@
 import { formatPrice } from "../helpers"
 import { useQuiosco } from "../hooks/useQuiosco"
 
-export const Producto = ({nombre, precio, imagen, categoria_id, id}) => {
+export const Producto = ({producto}) => {
   
-  const {hanndleModal} = useQuiosco();
+  const {hanndleModal, handdleSetProducto} = useQuiosco();
+  const {nombre, precio, imagen, categoria_id, id} = producto;
   
   return (
     <div className="border-0 p-3 shadow bg-white">
@@ -19,6 +20,7 @@ export const Producto = ({nombre, precio, imagen, categoria_id, id}) => {
           className="bg-yellow-500 hover:bg-yellow-700 text-white w-full p-3 font-bold mt-5 uppercase cursor-pointer"
           onClick={() => {
             hanndleModal();
+            handdleSetProducto(producto);
           }}
         >
           Agregar
