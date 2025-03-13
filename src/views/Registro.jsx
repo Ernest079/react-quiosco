@@ -1,11 +1,44 @@
+import { createRef, useState } from "react"
+import { Link } from "react-router-dom";
+import { clienteAxios } from "../config/axios";
+import { Alerta } from "../components/Alerta";
 
 export const Registro = () => {
+
+  const nameRef = createRef();
+  const emailRef = createRef();
+  const passwordRef = createRef();
+  const passwordConfirmationRef = createRef();
+
+  const [errores, setErrores] = useState([]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const datos = {
+      name: nameRef.current.value,
+      email: emailRef.current.value,
+      password : passwordRef.current.value,
+      password_confirmation: passwordConfirmationRef.current.value,
+    }
+    try {
+      const {data} = await clienteAxios.post('/api/registro', datos);
+      console.log(data.token);
+      
+    } catch (error) {
+      setErrores(Object.values(error.response.data.errors));
+    }
+  }
+
   return (
     <>
       <h1 className="text-4xl font-black">Create an account</h1>
       <p>Crea tu cuenta llenando el formulario</p>
       <div className="bg-white shadow-md rounded-md mt-10 px-5 py-10">
-        <form action="">
+        <form
+          onSubmit={handleSubmit}
+          noValidate
+        >
+          {errores ? errores.map((error, i) => <Alerta key={i}>{error}</Alerta>) : null }
           <div className="mb-4">
             <label className="text-slate-800"
               htmlFor="name"
@@ -17,6 +50,7 @@ export const Registro = () => {
               className="mt-2 w-full p-3 bg-gray-50"
               name = "name"
               placeholder="Enter your name"
+              ref={nameRef}
             />
           </div>
           <div className="mb-4">
@@ -30,6 +64,7 @@ export const Registro = () => {
               className="mt-2 w-full p-3 bg-gray-50"
               name = "email"
               placeholder="Enter your email"
+              ref={emailRef}
             />
           </div>
           <div className="mb-4">
@@ -43,6 +78,7 @@ export const Registro = () => {
               className="mt-2 w-full p-3 bg-gray-50"
               name = "password"
               placeholder="Password"
+              ref={passwordRef}
             />
           </div>
           <div className="mb-4">
@@ -56,6 +92,7 @@ export const Registro = () => {
               className="mt-2 w-full p-3 bg-gray-50"
               name = "password_confirmation"
               placeholder="Confirm your password"
+              ref={passwordConfirmationRef}
             />
           </div>
           <input type="submit" 
@@ -65,7 +102,7 @@ export const Registro = () => {
         </form>
       </div>
       <nav className="mt-5">
-        <a href="/auth/login"> DoCreate one </a>
+        <Link to="/auth/login"> Do you have an account? Login </Link>
       </nav>
     </>
   )
