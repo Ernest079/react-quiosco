@@ -25,11 +25,7 @@ export const Layout = () => {
 
   const {modal} = useQuiosco();
   const {user, error} = useAuth({middleware: 'auth'});
-
-  console.log(user);
-  console.log(error);
   
-
   return (
     <>
       <div className='md:flex'>

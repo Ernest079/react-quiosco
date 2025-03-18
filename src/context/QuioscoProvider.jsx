@@ -22,8 +22,14 @@ export const QuioscoProvider = ({children}) => {
   }, [pedido])
   
   const obtenerCategorias = async() => {
+    const token = localStorage.getItem('AUTH_TOKEN');
+
     try {
-      const {data} = await clienteAxios('/api/categorias');
+      const {data} = await clienteAxios('/api/categorias',{
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
+      });
       setCategorias(data.data);
       setCategoriaActual(data.data[0]);
     } catch (error) {
@@ -77,6 +83,60 @@ export const QuioscoProvider = ({children}) => {
     toast.success('Pedido Eliminado');
   }
 
+  const handleSubmitNewOrder = async () => {
+    const token = localStorage.getItem('AUTH_TOKEN');
+
+    try {
+      const {data} = await clienteAxios.post('/api/pedidos', {
+        total,
+        productos: pedido.map(producto => {
+          return {
+            id: producto.id,
+            cantidad: producto.cantidad
+          }
+        }),
+      },{
+        headers:{
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      toast.success(data.message);
+      setTimeout(() => {
+        setPedido([]);
+      }, 1000);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleCompletar = async (id) => {
+    const token = localStorage.getItem('AUTH_TOKEN');
+
+    try {
+      await clienteAxios.put(`/api/pedidos/${id}`, null, {
+        headers:{
+          Authorization: `Bearer ${token}`,
+
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleProductoAgotado = async id => {
+    const token = localStorage.getItem('AUTH_TOKEN')
+    try {
+        await clienteAxios.put(`/api/productos/${id}`, null, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
   return (
     <QuioscoContext.Provider
       value = {{ 
@@ -92,6 +152,9 @@ export const QuioscoProvider = ({children}) => {
         editarCantidad,
         eliminarProductoPedido,
         total,
+        handleSubmitNewOrder,
+        handleCompletar,
+        handleProductoAgotado,
       }}
     >
       {children}

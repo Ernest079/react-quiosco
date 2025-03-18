@@ -3,9 +3,14 @@ import { useQuiosco } from "../hooks/useQuiosco"
 import { ResumenProducto } from "./ResumenProducto";
 
 export const Resumen = () => {
-  const {pedido, total} = useQuiosco();
+  const {pedido, total, handleSubmitNewOrder} = useQuiosco();
 
   const comprobarPedido = () => pedido.length === 0;
+
+  const handleSubmit = (event) =>{
+    event.preventDefault();
+    handleSubmitNewOrder();
+  }
   
 
   return (
@@ -35,7 +40,9 @@ export const Resumen = () => {
       </p>
       {
         !comprobarPedido() && (
-          <form className="w-full">
+          <form className="w-full"
+            onSubmit={handleSubmit}
+          >
             <div className="mt-5">
               <input type="submit" name="" id="" value="Confirmar Pedido"
                 className={"bg-yellow-400 hover:bg-amber-500 px-5 py-2 rounded uppercase font-bold text-white text-center w-full cursor-pointer"}
